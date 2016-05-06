@@ -2,6 +2,7 @@
 
 #include <stdint.h>
 #include <string>
+#include <memory>
 #include <czmq.h>
 
 class DataGateway {
@@ -12,7 +13,14 @@ public:
 	int run(const std::string& address,const std::string& connect_string);
 
 private:
-	std::string		m_address;
-	std::string		m_connect_string;
+	zsock_t* create_socket(const std::string& address);
+
+	void handle_error(const std::shared_ptr<google::protobuf::Message>& msg);
+
+	// process functions
+private:
+	int proce_get_account(const google::protobuf::Message& msg);
+private:
+	zsock_t*			m_sock;
 };
 
